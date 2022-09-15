@@ -1,14 +1,14 @@
 import React from 'react';
 import axios from 'axios';
-import Header from './Header';
- import Footer from './Footer';
- import BestBooks from './BestBooks';
- import 'bootstrap/dist/css/bootstrap.min.css';
- import {
-   BrowserRouter as Router,
-  Routes,
-  Route
-} from "react-router-dom";
+// import Header from './Header';
+//  import Footer from './Footer';
+//  import BestBooks from './BestBooks';
+//  import 'bootstrap/dist/css/bootstrap.min.css';
+//  import {
+//    BrowserRouter as Router,
+//   Routes,
+//   Route
+// } from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
 import './App.css' 
 
