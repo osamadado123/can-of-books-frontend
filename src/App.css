@@ -1,0 +1,23 @@
+.d-block {
+
+ width: 200;
+
+}
+
+
+.p1 {
+ 
+    text-align: center;
+    margin-right: 20px;
+}
+
+.h3 {
+ 
+    width: 200;
+}
+
+body {
+
+    background-image: url("https://media.istockphoto.com/photos/bookshelves-in-the-library-with-old-books-3d-render-picture-id1180993120?b=1&k=20&m=1180993120&s=170667a&w=0&h=jDa29OCLlZeIMETlAlCd8I3TUi9raqB2h_IBgmz51MQ=");
+    background-size: cover;
+}
