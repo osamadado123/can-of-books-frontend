@@ -22,7 +22,7 @@ class App extends React.Component {
   
  componentDidMount = ()=> {
 axios.get(`http://localhost:3010/books`).then(result => {
-
+console.log(result.data)
 this.setState({
   booksArr : result.data
 })
@@ -31,53 +31,81 @@ this.setState({
   console.log(err)
 }) 
  }
+
+ addBook = (event) =>{
+  event.preventDefault();
+  
+  const obj = {
+    bookTitle : event.target.bookTitle.value,
+    BookDescription : event.target.BookDescription.value,
+    bookStatus : event.target.bookStatus.value
+  }
+  axios
+  .post(`http://localhost:3010/books`, obj)
+  .then(result =>{
+    this.setState({
+      booksArr : result.data
+    })
+  })
+  .catch(err=>{
+    console.log(err);
+  })
+}
+deleteBook= (id) => {
+  axios
+  .delete(`http://localhost:3010/books/${id}`) 
+  .then(result =>{
+    this.setState({
+      booksArr : result.data
+    })
+  })
+  .catch(err=>{
+    console.log(err);
+  })
+}
   
   render() {
     return (
-      <Carousel>
-      <Carousel.Item>
-        <img
-          className="d-block"
-          src="https://thethinksync.com/wp-content/uploads/2021/05/annakarenina.jpg"
-          alt="First slide"
-        />
-        <Carousel.Caption>
-          <h3 className='h3'>Anna Karenina</h3>
-          <p className='p1'>Anna Karenina tells of the doomed love affair between the sensuous and rebellious Anna and the dashing officer, Count Vronsky. Tragedy unfolds as Anna rejects her passionless marriage</p>
-          <p className='p1'> by Leo Tolstoy </p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img
-          className="d-block"
-          src="https://kbimages1-a.akamaihd.net/14d3b404-15a6-4f3a-a426-32a66c5c942e/353/569/90/False/madame-bovary-386.jpg"
-          alt="Second slide"
-        />
+<div>
+        <h1 className='header'>Books App</h1>
+        <form onSubmit={this.addBook}>
+          <input type="text" name="bookTitle" placeholder='Book Name' />
+          <input type="text" name="BookDescription" placeholder='Book Description' />
+          <input type="text" name ="bookStatus" placeholder ='Book Status'></input>
+          <button type='submit'>Add Book</button>
 
-        <Carousel.Caption>
-          <h3 className='h3'>Madame Bovary</h3>
-          <p className='p1'>For daring to peer into the heart of an adulteress and enumerate its contents with profound dispassion, the author of Madame Bovary was tried for offenses against morality</p>
-          <p className='p1'> by Gustave Flaubert </p>
-        </Carousel.Caption>
-      </Carousel.Item>
+        </form>
+        {this.state.booksArr.length?(<Carousel className='car'>{
+        
+        this.state.booksArr.map(item =>{
+          return(
+            
+            
       <Carousel.Item>
-        <img
-          className="d-block"
-          src="https://m.media-amazon.com/images/I/616FPBY+fZL.jpg"
-          alt="Third slide"
-        />
+      <img
+        className="d-block"
+        src="https://images.wallpaperscraft.com/image/single/books_dark_shelf_159441_2560x1080.jpg"
+        alt="First slide"
+      />
+      <Carousel.Caption>
+        <h3 className='h3'>{item.title}</h3>
+        <p className='p1'>{item.description}</p>
+        <p className='p1'> {item.status} </p>
+        <button onClick={() => this.deleteBook(item._id)}>Delete Book</button>
+      </Carousel.Caption>
+    </Carousel.Item>
+          )})}
+    </Carousel>):(<h2>No Books Found</h2>)
+    }
+            
+            
+          
+          
+        
+        
+      </div>
 
-        <Carousel.Caption>
-          <h3 className='h3'>The Great Gatsby</h3>
-          <p className='p1'>
-          The novel chronicles an era that Fitzgerald himself dubbed the Jazz Age. Following the shock and chaos of World War I, American society enjoyed unprecedented levels of prosperity
 
-          </p>
-          <p className='p1'> by F. Scott Fitzgerald </p>
-        </Carousel.Caption>
-      </Carousel.Item>
-    </Carousel>
-      
 
     )
   }
