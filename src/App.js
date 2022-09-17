@@ -24,7 +24,7 @@ class App extends React.Component {
   }
   
  componentDidMount = ()=> {
-axios.get(`http://localhost:3010/books`).then(result => {
+axios.get(`https://serverapp7.herokuapp.com/books`).then(result => {
 console.log(result.data)
 this.setState({
   booksArr : result.data
@@ -44,7 +44,7 @@ this.setState({
     bookStatus : event.target.status.value
   }
   axios
-  .post(`http://localhost:3010/books`, obj)
+  .post(`https://serverapp7.herokuapp.com/books`, obj)
   .then(result =>{
     this.setState({
       booksArr : result.data
@@ -56,7 +56,7 @@ this.setState({
 }
 deleteBook= (id) => {
   axios
-  .delete(`http://localhost:3010/books/${id}`) 
+  .delete(`https://serverapp7.herokuapp.com/books/${id}`) 
   .then(result =>{
     this.setState({
       booksArr : result.data
@@ -91,7 +91,7 @@ updateBook = (event) => {
   }
   const id = this.state.currentBook._id;
   axios
-    .put(`https://localhost:3010/books/${id}`, obj)
+    .put(`https://serverapp7.herokuapp.com/books/${id}`, obj)
     .then(result => {
       this.setState({
         booksArr: result.data
