@@ -123,7 +123,7 @@ updateBook = (event) => {
       {isAuthenticated &&
       <div>
         
-        <h1><Link to="/Profile">profile</Link></h1>
+        
         <LogoutButton/>
         <form onSubmit={this.addBook}>
           <input type="text" name="title" placeholder='Book Name' />
