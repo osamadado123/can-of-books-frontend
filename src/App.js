@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import UpdateForm from './UpdateForm';
 // import Header from './Header';
 //  import Footer from './Footer';
 //  import BestBooks from './BestBooks';
@@ -16,12 +17,14 @@ class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      booksArr : []
+      booksArr : [],
+      // showFlag : false,
+    currentBook : {}
     }
   }
   
  componentDidMount = ()=> {
-axios.get(`https://serverapp7.herokuapp.com/books`).then(result => {
+axios.get(`http://localhost:3010/books`).then(result => {
 console.log(result.data)
 this.setState({
   booksArr : result.data
@@ -36,12 +39,12 @@ this.setState({
   event.preventDefault();
   
   const obj = {
-    bookTitle : event.target.bookTitle.value,
-    BookDescription : event.target.BookDescription.value,
-    bookStatus : event.target.bookStatus.value
+    bookTitle : event.target.title.value,
+    BookDescription : event.target.description.value,
+    bookStatus : event.target.status.value
   }
   axios
-  .post(`https://serverapp7.herokuapp.com/books`, obj)
+  .post(`http://localhost:3010/books`, obj)
   .then(result =>{
     this.setState({
       booksArr : result.data
@@ -53,7 +56,7 @@ this.setState({
 }
 deleteBook= (id) => {
   axios
-  .delete(`https://serverapp7.herokuapp.com/books/${id}`) 
+  .delete(`http://localhost:3010/books/${id}`) 
   .then(result =>{
     this.setState({
       booksArr : result.data
@@ -63,15 +66,52 @@ deleteBook= (id) => {
     console.log(err);
   })
 }
+ openForm = (item)=>{
+  this.setState({
+    showFlag : true,
+    currentBook : item
+  })
+console.log(item);
+
+ }
+ 
+ handleClose = () =>{
+  this.setState({
+    showFlag : false
+  })
+}
+
+updateBook = (event) => {
+  event.preventDefault();
+  
+  let obj = {
+    title: event.target.bookTitle.value,
+    description: event.target.bookDescription.value,
+
+  }
+  const id = this.state.currentBook._id;
+  axios
+    .put(`https://localhost:3010/books/${id}`, obj)
+    .then(result => {
+      this.setState({
+        booksArr: result.data
+      })
+      this.handleClose();
+    })
+    .catch(err => {
+      console.log(err);
+    })
+    
+}
   
   render() {
     return (
 <div>
         <h1 className='header'>Books App</h1>
         <form onSubmit={this.addBook}>
-          <input type="text" name="bookTitle" placeholder='Book Name' />
-          <input type="text" name="BookDescription" placeholder='Book Description' />
-          <input type="text" name ="bookStatus" placeholder ='Book Status'></input>
+          <input type="text" name="title" placeholder='Book Name' />
+          <input type="text" name="description" placeholder='Book Description' />
+          <input type="text" name ="status" placeholder ='Book Status'></input>
           <button type='submit'>Add Book</button>
 
         </form>
@@ -92,6 +132,7 @@ deleteBook= (id) => {
         <p className='p1'>{item.description}</p>
         <p className='p1'> {item.status} </p>
         <button onClick={() => this.deleteBook(item._id)}>Delete Book</button>
+        <button onClick={()=> this.openForm(item)}>Update Book</button>
       </Carousel.Caption>
     </Carousel.Item>
           )})}
@@ -99,7 +140,11 @@ deleteBook= (id) => {
     }
             
             
-          
+         <UpdateForm
+         show = {this.state.showFlag}
+         handleClose = {this.handleClose}
+         updateBook = {this.updateBook}
+         currentBook = {this.state.currentBook}/>
           
         
         
