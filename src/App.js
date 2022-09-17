@@ -1,17 +1,23 @@
 import React from 'react';
 import axios from 'axios';
 import UpdateForm from './UpdateForm';
-// import Header from './Header';
+ import Header from './Header';
+ import { withAuth0 } from '@auth0/auth0-react';
+import Profile from './Profile';
+import { Link } from "react-router-dom";
+
 //  import Footer from './Footer';
 //  import BestBooks from './BestBooks';
  import 'bootstrap/dist/css/bootstrap.min.css';
-//  import {
-//    BrowserRouter as Router,
-//   Routes,
-//   Route
-// } from "react-router-dom";
+ import {
+   BrowserRouter as Router,
+  Routes,
+  Route
+} from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
 import './App.css' 
+import LoginButton from './LoginButton';
+import LogoutButton from './LogoutButton';
 
 class App extends React.Component {
   constructor(props){
@@ -24,6 +30,7 @@ class App extends React.Component {
   }
   
  componentDidMount = ()=> {
+  
 axios.get(`https://serverapp7.herokuapp.com/books`).then(result => {
 console.log(result.data)
 this.setState({
@@ -105,9 +112,19 @@ updateBook = (event) => {
 }
   
   render() {
+    const { isAuthenticated } = this.props.auth0;
+
     return (
-<div>
-        <h1 className='header'>Books App</h1>
+      
+      <>
+      <h1 className='header'>Books App</h1>
+     
+      <LoginButton/>
+      {isAuthenticated &&
+      <div>
+        
+        <h1><Link to="/Profile">profile</Link></h1>
+        <LogoutButton/>
         <form onSubmit={this.addBook}>
           <input type="text" name="title" placeholder='Book Name' />
           <input type="text" name="description" placeholder='Book Description' />
@@ -150,10 +167,23 @@ updateBook = (event) => {
         
       </div>
 
+    }
 
+<div>
+<Router>
+  <Routes>
+  <Route 
+              exact path="/Profile"
+              element={isAuthenticated && <Profile />}
+            >
+            </Route>
 
+  </Routes>
+</Router>
+</div>
+</>
     )
   }
 }
 
-export default App;
+export default withAuth0(App);
